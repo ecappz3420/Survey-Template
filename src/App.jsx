@@ -7,6 +7,10 @@ import fetchMember from './API/fetchMember'
 import Section2 from './components/Section2'
 import Section3 from './components/Section3'
 import Section4 from './components/Section4'
+import Section5 from './components/Section5'
+import fetchSingleSelect from './API/fetchSigleSelect'
+import fetchFreeText from './API/fetchFreeText'
+import Section6 from './components/Section6'
 
 const App = () => {
   const [showFields, setShowFields] = useState([]);
@@ -15,6 +19,8 @@ const App = () => {
   const [multiChoiceData, setMultiChoiceData] = useState(null);
   const [memberObj, setMemberObj] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [singleSelectQuestions, setSingleQuestions] = useState([]);
+  const [freeQuestions, setFreeQuestions] = useState([]);
 
 
   useEffect(() => {
@@ -27,6 +33,10 @@ const App = () => {
       setMemberObj(memberData);
       const yes_no_data = await fetchYesNoQuestions(params.survey_id);
       const multi_choice_data = await fetchMultiChoiceData(params.survey_id);
+      const single_select_questions = await fetchSingleSelect(params.survey_id);
+      const free_text_questions = await fetchFreeText(params.survey_id);
+      setFreeQuestions(free_text_questions);
+      setSingleQuestions(single_select_questions);
       setMultiChoiceData(multi_choice_data);
       setYesNoData(yes_no_data);
       setShowFields(data.Fields_to_be_Shown);
@@ -68,6 +78,20 @@ const App = () => {
             {
               multiChoiceData && multiChoiceData.map((result, index) => (
                 <Section4 key={index} choices={result.Choices} question={result.Question} />
+              ))
+            }
+            {/* {Single Select Questions} */}
+            <div className='font-semibold my-3 border-b py-2'>Section 5</div>
+            {
+              singleSelectQuestions && singleSelectQuestions.map((result, index) => (
+                <Section5 key={index} choices={result.Choices} question={result.Question} />
+              ))
+            }
+            {/* {Free Text Questions} */}
+            <div className='font-semibold my-3 border-b py-2'>Section 6</div>
+            {
+              freeQuestions && freeQuestions.map((result,index)=>(
+                <Section6 key={index} question={result.Question}/>
               ))
             }
             <div className='text-center p-2'>
