@@ -11,6 +11,7 @@ import Section5 from './components/Section5'
 import fetchSingleSelect from './API/fetchSigleSelect'
 import fetchFreeText from './API/fetchFreeText'
 import Section6 from './components/Section6'
+import addRecord from './API/AddRecord'
 
 const App = () => {
   const [showFields, setShowFields] = useState([]);
@@ -21,6 +22,13 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [singleSelectQuestions, setSingleQuestions] = useState([]);
   const [freeQuestions, setFreeQuestions] = useState([]);
+  const [surveyID, setSurveyID] = useState(null);
+
+  const [validateResponses, setValidateResposes] = useState([]);
+  const [yesNoResponses, setYesNoResponses] = useState([]);
+  const [multiChoiceResponses, setMultiChoiceResponses] = useState([]);
+  const [singleChoiceResponses, setSingleChoiceResponses] = useState([]);
+  const [freeTextResponses, setFreeTextResponses] = useState([]);
 
 
   useEffect(() => {
@@ -28,6 +36,7 @@ const App = () => {
       setLoading(true);
       await ZOHO.CREATOR.init();
       const params = await ZOHO.CREATOR.UTIL.getQueryParams();
+      setSurveyID(params.survey_id);
       const data = await fetchData(params.survey_id);
       const memberData = await fetchMember(params.member_id);
       setMemberObj(memberData);
@@ -46,6 +55,118 @@ const App = () => {
     getData();
   }, []);
 
+  const updateVaidateResponse = (index, value) => {
+    setValidateResposes((prevState) => {
+      const updatedData = [...prevState]
+      updatedData[index] = value
+      return updatedData
+    });
+  };
+
+  const updateYesNoResponses = (index, value) => {
+    setYesNoResponses((prevState) => {
+      const updatedData = [...prevState]
+      updatedData[index] = value
+      return updatedData
+    })
+  }
+
+  const updateMultiChoiceResponses = (index, value) => {
+    setMultiChoiceResponses((prevState) => {
+      const updateData = [...prevState]
+      updateData[index] = value;
+      return updateData
+    })
+  }
+
+  const updateSingleChoiceResponses = (index, value) => {
+    setSingleChoiceResponses((prevState) => {
+      const updatedData = [...prevState]
+      updatedData[index] = value
+      return updatedData
+    })
+  }
+
+  const updateFreeTextResponses = (index, value) => {
+    setFreeTextResponses((prevState) => {
+      const updatedData = [...prevState]
+      updatedData[index] = value
+      return updatedData
+    })
+  }
+
+
+
+  const submitRecord = async () => {
+    const formData = {
+      "data": {
+        Member: memberObj.ID,
+        Survey_Template: surveyID
+      }
+    }
+    const config = {
+      appName: "survey-management",
+      formName: "Survey_Response",
+      data: formData
+    }
+    try {
+
+      const response = await ZOHO.CREATOR.API.addRecord(config);
+
+      const newValidateResponse = validateResponses.map(item => ({
+        data: {
+          ...item.data,
+          Survey_Response: response.data.ID
+        }
+      }));
+
+
+      newValidateResponse.map(async item => await addRecord("Validate_Fields_Response", item));
+
+      const newYesNoResponses = yesNoResponses.map(item => ({
+        data: {
+          ...item.data,
+          Survey_Response: response.data.ID
+        }
+      }))
+
+      newYesNoResponses.map(async item => await addRecord("Yes_or_No_Type_Response", item));
+
+      const newMultiChoiceResponses = multiChoiceResponses.map(item => ({
+        data: {
+          ...item.data,
+          Survey_Response: response.data.ID
+        }
+      }))
+
+      newMultiChoiceResponses.map(async item => await addRecord("Multichoice_Response", item));
+      const newSingleChoiceResposnes = singleChoiceResponses.map(item => ({
+        data: {
+          ...item.data,
+          Survey_Response: response.data.ID
+        }
+      }))
+
+      newSingleChoiceResposnes.map(async item => await addRecord("Single_Choice_Response",item));
+      const newFreeTextResponses = freeTextResponses.map(item => ({
+        data: {
+          ...item.data,
+        Survey_Response: response.data.ID
+        }
+      }))
+      newFreeTextResponses.map(async item => await addRecord("Free_Text_Response",item));
+
+location.reload();
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+
+
+  }
+
   return (
     <div className='inter'>
       <div className='text-center text-xl font-bold p-2'>Survey</div>
@@ -63,39 +184,63 @@ const App = () => {
             <div className='font-semibold my-3 border-b py-2'>Section 2</div>
             {
               fieldsValidate && fieldsValidate.map((field, index) => (
-                <Section2 key={index} field_name={field.display_value} member_obj={memberObj} />
+                <Section2
+                  key={index}
+                  index={index}
+                  field_name={field.display_value}
+                  field_id={field.ID}
+                  member_obj={memberObj}
+                  updateVaidateResponse={updateVaidateResponse} />
               ))
             }
             {/* {Yes or No Questions} */}
             <div className='font-semibold my-3 border-b py-2'>Section 3</div>
             {
               yesNoData && yesNoData.map((result, index) => (
-                <Section3 key={index} question={result.Question} />
+                <Section3
+                  key={index}
+                  question={result.Question}
+                  index={index}
+                  updateYesNoResponses={updateYesNoResponses} />
               ))
             }
             {/* {Multichoice Questions} */}
             <div className='font-semibold my-3 border-b py-2'>Section 4</div>
             {
               multiChoiceData && multiChoiceData.map((result, index) => (
-                <Section4 key={index} choices={result.Choices} question={result.Question} />
+                <Section4
+                  key={index}
+                  choices={result.Choices}
+                  question={result.Question}
+                  index={index}
+                  updateMultiChoiceResponses={updateMultiChoiceResponses} />
               ))
             }
             {/* {Single Select Questions} */}
             <div className='font-semibold my-3 border-b py-2'>Section 5</div>
             {
               singleSelectQuestions && singleSelectQuestions.map((result, index) => (
-                <Section5 key={index} choices={result.Choices} question={result.Question} />
+                <Section5
+                  key={index}
+                  choices={result.Choices}
+                  question={result.Question}
+                  index={index}
+                  updateSingleChoiceResponses={updateSingleChoiceResponses} />
               ))
             }
             {/* {Free Text Questions} */}
             <div className='font-semibold my-3 border-b py-2'>Section 6</div>
             {
-              freeQuestions && freeQuestions.map((result,index)=>(
-                <Section6 key={index} question={result.Question}/>
+              freeQuestions && freeQuestions.map((result, index) => (
+                <Section6
+                  key={index}
+                  question={result.Question}
+                  index={index}
+                  updateFreeTextResponses={updateFreeTextResponses} />
               ))
             }
             <div className='text-center p-2'>
-              <button className='bg-blue-600 text-white rounded shadow px-3 py-1 transition-all hover:bg-blue-500 hover:transition-all'>Submit</button>
+              <button onClick={submitRecord} className='bg-blue-600 text-white rounded shadow px-3 py-1 transition-all hover:bg-blue-500 hover:transition-all'>Submit</button>
             </div>
           </div>
 

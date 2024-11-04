@@ -1,11 +1,24 @@
 import Input from '@mui/joy/Input'
-import React from 'react'
+import React, { useState } from 'react'
 
-const Section6 = (params) => {
+const Section6 = (props) => {
+
+  const [value , setValue] = useState("");
+  const handleChange = (e)=> {
+    setValue(e.target.value);
+    const formData = {
+      "data": {
+        Question: props.question,
+        Response: e.target.value,
+        Survey_Response: 0
+      }
+    }
+    props.updateFreeTextResponses(props.index, formData);
+  }
   return (
     <div className='p-2 flex gap-[20px] items-center'>
-        <div className='text-sm w-[200px]'>{params.question}</div>
-        <Input required className='w-[300px]'/>
+        <div className='text-sm w-[200px]'>{props.question}</div>
+        <Input required value={value} onChange={handleChange} className='w-[300px]'/>
     </div>
   )
 }
