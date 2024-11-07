@@ -2,18 +2,17 @@ import React, { useState } from 'react'
 import Input from '@mui/joy/Input';
 import FormControl from '@mui/joy/FormControl'
 import FormLabel from '@mui/joy/FormLabel'
-import Radio from '@mui/joy/Radio'
-import RadioGroup from '@mui/joy/RadioGroup'
+import Button from '@mui/joy/Button'
 
 const Section2 = (props) => {
-    const [value, setValue] = React.useState('');
+    const [choice, setChoice] = useState('');
 
-    const handleChange = (event) => {
-        setValue(event.target.value);
+    const handleChange = (value) => {
+        setChoice(value);
         const formData = {
             "data": {
                 Field_form: props.field_id,
-                Response: event.target.value,
+                Response: value,
                 Survey_Response: 0
             }
         }
@@ -30,19 +29,11 @@ const Section2 = (props) => {
                 <FormLabel sx={{ width: '150px', paddingX: '10px', paddingY: '15px' }}>{props.field_name}</FormLabel>
                 <Input className='w-[300px]' value={field_value} disabled />
             </FormControl>
-            <FormControl>
-                <RadioGroup
-                    name="controlled-radio-buttons-group"
-                    value={value}
-                    onChange={handleChange}
-                    size='sm'
-                    sx={{ my: 1 }}
-                >
-                    <Radio value="Match" label="Match" />
-                    <Radio value="Not Match" label="Not Match" />
-                    <Radio value="Partially Match" label="Partially Match" />
-                </RadioGroup>
-            </FormControl>
+            <div className='flex gap-3 text-sm rounded-lg p-1'>
+                <Button onClick={()=>handleChange('Match')} color='success' variant={choice === 'Match'? 'solid': 'outlined' }>Match</Button>
+                <Button onClick={()=>handleChange('Not Match')} color='danger' variant={choice === 'Not Match'? 'solid': 'outlined' }>Not Match</Button>
+                <Button onClick={()=>handleChange('Partially Match')} color='warning' variant={choice === 'Partially Match'? 'solid': 'outlined' }>Partially Match</Button>
+            </div>
         </div>
     )
 }

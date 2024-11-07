@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import FormControl from '@mui/joy/FormControl'
-import Radio from '@mui/joy/Radio'
-import RadioGroup from '@mui/joy/RadioGroup'
+import Typography from '@mui/joy/Typography';
+import Switch from '@mui/joy/Switch'
 
 const Section3 = (props) => {
-    const [value , setValue] = useState('');
+    const [value, setValue] = useState(false);
     const handleChange = (e) => {
-        setValue(e.target.value);
+        setValue(e.target.checked);
         const formData = {
             "data": {
                 Question: props.question,
-                Response: e.target.value,
+                Response: e.target.checked ? 'Yes': 'No',
                 Survey_Response: 0
             }
         }
@@ -19,11 +19,12 @@ const Section3 = (props) => {
     return (
         <div className='p-2'>
             <div className='mb-2 text-sm'>{props.question}</div>
-            <FormControl>
-                <RadioGroup onChange={handleChange} size='sm'>
-                    <Radio value='Yes' label='Yes'/>
-                    <Radio value='No' label='No'/>
-                </RadioGroup>
+            <FormControl required>
+                <div className='flex gap-3 items-center p-2'>
+                    <Typography>Off</Typography>
+                    <Switch checked={value} onChange={handleChange} />
+                    <Typography>On</Typography>
+                </div>
             </FormControl>
         </div>
     )

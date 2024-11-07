@@ -69,6 +69,7 @@ const App = () => {
       updatedData[index] = value
       return updatedData
     })
+    console.log(yesNoResponses);
   }
 
   const updateMultiChoiceResponses = (index, value) => {
@@ -147,16 +148,16 @@ const App = () => {
         }
       }))
 
-      newSingleChoiceResposnes.map(async item => await addRecord("Single_Choice_Response",item));
+      newSingleChoiceResposnes.map(async item => await addRecord("Single_Choice_Response", item));
       const newFreeTextResponses = freeTextResponses.map(item => ({
         data: {
           ...item.data,
-        Survey_Response: response.data.ID
+          Survey_Response: response.data.ID
         }
       }))
-      newFreeTextResponses.map(async item => await addRecord("Free_Text_Response",item));
+      newFreeTextResponses.map(async item => await addRecord("Free_Text_Response", item));
 
-location.reload();
+      location.reload();
 
     } catch (error) {
       console.log(error);
@@ -169,10 +170,10 @@ location.reload();
 
   return (
     <div className='inter'>
-      <div className='text-center text-xl font-bold p-2'>Survey</div>
+      <div className='text-center text-xl text-white font-bold p-2 bg-blue-600'>Survey</div>
       {
         loading === false ? (
-          <div className='p-2'>
+          <div className='p-2 bg-slate-50'>
             {/* {Field to be Shown} */}
             <div className='font-semibold mb-3 border-b py-2'>Section 1</div>
             {
