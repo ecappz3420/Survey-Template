@@ -12,6 +12,8 @@ import fetchSingleSelect from './API/fetchSigleSelect'
 import fetchFreeText from './API/fetchFreeText'
 import Section6 from './components/Section6'
 import addRecord from './API/AddRecord'
+import fetchLoanMember from './API/fetchLoanMember'
+import fetchLoan from './API/fetchLoan'
 
 const App = () => {
   const [showFields, setShowFields] = useState([]);
@@ -23,7 +25,6 @@ const App = () => {
   const [singleSelectQuestions, setSingleQuestions] = useState([]);
   const [freeQuestions, setFreeQuestions] = useState([]);
   const [surveyID, setSurveyID] = useState(null);
-
   const [validateResponses, setValidateResposes] = useState([]);
   const [yesNoResponses, setYesNoResponses] = useState([]);
   const [multiChoiceResponses, setMultiChoiceResponses] = useState([]);
@@ -36,10 +37,13 @@ const App = () => {
       setLoading(true);
       await ZOHO.CREATOR.init();
       const params = await ZOHO.CREATOR.UTIL.getQueryParams();
+      const loan_member = await fetchLoanMember(params.loan_id);
       setSurveyID(params.survey_id);
       const data = await fetchData(params.survey_id);
-      const memberData = await fetchMember(params.member_id);
-      setMemberObj(memberData);
+      const loanObj = await fetchLoan(loan_member.Loan.ID);
+      const memberData = await fetchMember(loan_member.Member.ID);
+      const loanAndMemberData = {...loanObj,...memberData};
+      setMemberObj(loanAndMemberData);
       const yes_no_data = await fetchYesNoQuestions(params.survey_id);
       const multi_choice_data = await fetchMultiChoiceData(params.survey_id);
       const single_select_questions = await fetchSingleSelect(params.survey_id);
@@ -61,6 +65,7 @@ const App = () => {
       updatedData[index] = value
       return updatedData
     });
+    console.log(validateResponses);
   };
 
   const updateYesNoResponses = (index, value) => {
@@ -69,7 +74,6 @@ const App = () => {
       updatedData[index] = value
       return updatedData
     })
-    console.log(yesNoResponses);
   }
 
   const updateMultiChoiceResponses = (index, value) => {

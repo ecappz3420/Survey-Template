@@ -1,7 +1,7 @@
 const fetchMember = async (member_id) => {
     const config = {
         appName: "survey-management",
-        reportName: 'All_Members',
+        reportName: 'Member_Report',
         id: member_id
     }
     try {
