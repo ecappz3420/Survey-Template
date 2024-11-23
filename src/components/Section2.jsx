@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import Button from '@mui/joy/Button';
+import Textarea from '@mui/joy/Textarea';
 
 const Section2 = (props) => {
     const [show, setShow] = useState(false);
@@ -57,9 +58,7 @@ const Section2 = (props) => {
         <div className='mb-3'>
             <FormControl className='mb-3' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <FormLabel sx={{ width: '150px', paddingX: '10px', paddingY: '15px' }}>{props.field_name}</FormLabel>
-                <div className="border rounded-lg border-gray-400 p-2 bg-slate-50">
-                    <input className='w-[300px] rounded-lg bg-slate-50 focus:outline-none' value={fieldValue.Actual_Value || ""} disabled />
-                </div>
+                    <Textarea value={fieldValue.Actual_Value} disabled className='w-[300px]'/>
             </FormControl>
             <div className='flex gap-3 text-sm rounded-lg p-1'>
                 <Button name="Response" onClick={() => handleChange('Match')} color='success' variant={fieldValue.Response === 'Match' ? 'solid' : 'outlined'}>Match</Button>
