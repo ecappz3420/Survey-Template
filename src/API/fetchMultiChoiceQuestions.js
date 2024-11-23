@@ -1,6 +1,6 @@
 const fetchMultiChoiceData = async (survey_id) => {
     const config = {
-        appName: "survey-management",
+        appName: "loan-management",
         reportName: 'All_Multiselect_Type_Questions',
         criteria: `Survey_Template == ${survey_id}`
     }

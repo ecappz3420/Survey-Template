@@ -1,7 +1,7 @@
 const fetchLoan = async (id) => {
     try {
         const config = {
-            appName: "survey-management",
+            appName: "loan-management",
             reportName: "All_Loans",
             id: id
         }

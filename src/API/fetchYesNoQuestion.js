@@ -1,6 +1,6 @@
 const fetchYesNoQuestions = async (survey_id) => {
     const config = {
-        appName: 'survey-management',
+        appName: 'loan-management',
         reportName: 'Questionaire_Report',
         criteria: `Survey_Template == ${survey_id}`
     }

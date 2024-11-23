@@ -1,6 +1,6 @@
 const addRecord = async (formName, formData) => {
     const config = {
-        appName: "survey-management",
+        appName: "loan-management",
         formName: formName,
         data: formData
     }

@@ -1,7 +1,7 @@
 const fetchSingleSelect = async (params) => {
     try {
         const response = await ZOHO.CREATOR.API.getAllRecords({
-            appName: "survey-management",
+            appName: "loan-management",
             reportName: "All_Select_Type_Questions",
             criteria: `Survey_Template == ${params}`
         });

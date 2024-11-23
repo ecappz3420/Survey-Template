@@ -1,6 +1,6 @@
 const fetchMember = async (member_id) => {
     const config = {
-        appName: "survey-management",
+        appName: "loan-management",
         reportName: 'Member_Report',
         id: member_id
     }

@@ -110,7 +110,7 @@ const App = () => {
       }
     }
     const config = {
-      appName: "survey-management",
+      appName: "loan-management",
       formName: "Survey_Response",
       data: formData
     }

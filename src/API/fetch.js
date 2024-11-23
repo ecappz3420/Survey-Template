@@ -1,6 +1,6 @@
 const fetchData = async (id) => {
     const config = {
-        appName: "survey-management",
+        appName: "loan-management",
         reportName: 'All_Survey_Templates',
         id: id
     }
