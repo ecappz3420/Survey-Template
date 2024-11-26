@@ -30,6 +30,7 @@ const App = () => {
   const [multiChoiceResponses, setMultiChoiceResponses] = useState([]);
   const [singleChoiceResponses, setSingleChoiceResponses] = useState([]);
   const [freeTextResponses, setFreeTextResponses] = useState([]);
+  const [surveyObj, setSurveyObj] = useState({});
 
 
   useEffect(() => {
@@ -40,20 +41,22 @@ const App = () => {
       const loan_member = await fetchLoanMember(params.loan_id);
       setSurveyID(params.survey_id);
       const data = await fetchData(params.survey_id);
+      console.log(data);
+      setSurveyObj(data);
       const loanObj = await fetchLoan(loan_member.Loan.ID);
       const memberData = await fetchMember(loan_member.Member.ID);
-      const loanAndMemberData = {...loanObj,...memberData};
+      const loanAndMemberData = { ...loanObj, ...memberData };
       setMemberObj(loanAndMemberData);
       const yes_no_data = await fetchYesNoQuestions(params.survey_id);
       const multi_choice_data = await fetchMultiChoiceData(params.survey_id);
       const single_select_questions = await fetchSingleSelect(params.survey_id);
       const free_text_questions = await fetchFreeText(params.survey_id);
-      setFreeQuestions(free_text_questions);
-      setSingleQuestions(single_select_questions);
+      setFreeQuestions(free_text_questions.reverse());
+      setSingleQuestions(single_select_questions.reverse());
       setMultiChoiceData(multi_choice_data);
-      setYesNoData(yes_no_data);
-      setShowFields(data.Fields_to_be_Shown);
-      setFieldsValidate(data.Fields_to_be_Validated);
+      setYesNoData(yes_no_data.reverse());
+      setShowFields(data.Fields_to_be_Shown.reverse());
+      setFieldsValidate(data.Fields_to_be_Validated.reverse());
       setLoading(false);
     }
     getData();
@@ -179,27 +182,32 @@ const App = () => {
         loading === false ? (
           <div className='p-2 bg-slate-50'>
             {/* {Field to be Shown} */}
-            <div className='font-semibold mb-3 border-b py-2'>Section 1</div>
-            {
-              showFields && showFields.map((field, index) => (
-                <Section1 key={index} field_name={field.display_value} member_obj={memberObj} />
-              ))
-            }
+            <div className='font-semibold mb-3 border-b py-2'>{surveyObj.Section_1_Title}</div>
+            <div className='flex flex-wrap'>
+              {
+                showFields && showFields.map((field, index) => (
+                  <Section1 key={index} field_name={field.display_value} member_obj={memberObj} />
+                ))
+              }
+            </div>
             {/* {Field to be validated} */}
-            <div className='font-semibold my-3 border-b py-2'>Section 2</div>
-            {
-              fieldsValidate && fieldsValidate.map((field, index) => (
-                <Section2
-                  key={index}
-                  index={index}
-                  field_name={field.display_value}
-                  field_id={field.ID}
-                  member_obj={memberObj}
-                  updateVaidateResponse={updateVaidateResponse} />
-              ))
-            }
+            <div className='font-semibold my-3 border-b py-2'>{surveyObj.Section_2_Title}</div>
+            <div className="flex flex-wrap">
+              {
+                fieldsValidate && fieldsValidate.map((field, index) => (
+                  <Section2
+                    key={index}
+                    index={index}
+                    field_name={field.display_value}
+                    field_id={field.ID}
+                    member_obj={memberObj}
+                    updateVaidateResponse={updateVaidateResponse} />
+                ))
+              }
+            </div>
+
             {/* {Yes or No Questions} */}
-            <div className='font-semibold my-3 border-b py-2'>Section 3</div>
+            <div className='font-semibold my-3 border-b py-2'>{surveyObj.Section_3_Title}</div>
             {
               yesNoData && yesNoData.map((result, index) => (
                 <Section3
@@ -210,7 +218,7 @@ const App = () => {
               ))
             }
             {/* {Multichoice Questions} */}
-            <div className='font-semibold my-3 border-b py-2'>Section 4</div>
+            <div className='font-semibold my-3 border-b py-2'>{surveyObj.Section_4_Title}</div>
             {
               multiChoiceData && multiChoiceData.map((result, index) => (
                 <Section4
@@ -222,7 +230,7 @@ const App = () => {
               ))
             }
             {/* {Single Select Questions} */}
-            <div className='font-semibold my-3 border-b py-2'>Section 5</div>
+            <div className='font-semibold my-3 border-b py-2'>{surveyObj.Section_5_Title}</div>
             {
               singleSelectQuestions && singleSelectQuestions.map((result, index) => (
                 <Section5
@@ -234,7 +242,7 @@ const App = () => {
               ))
             }
             {/* {Free Text Questions} */}
-            <div className='font-semibold my-3 border-b py-2'>Section 6</div>
+            <div className='font-semibold my-3 border-b py-2'>{surveyObj.Section_6_Title}</div>
             {
               freeQuestions && freeQuestions.map((result, index) => (
                 <Section6

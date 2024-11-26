@@ -55,15 +55,15 @@ const Section2 = (props) => {
     };
 
     return (
-        <div className='mb-3'>
-            <FormControl className='mb-3' sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <FormLabel sx={{ width: '150px', paddingX: '10px', paddingY: '15px' }}>{props.field_name}</FormLabel>
-                    <Textarea value={fieldValue.Actual_Value} disabled className='w-[300px]'/>
+        <div className='mb-3 w-1/2'>
+            <FormControl className='mb-3'>
+                <FormLabel>{props.field_name}</FormLabel>
+                    <Textarea value={fieldValue.Actual_Value} disabled className='w-[250px]'/>
             </FormControl>
-            <div className='flex gap-3 text-sm rounded-lg p-1'>
-                <Button name="Response" onClick={() => handleChange('Match')} color='success' variant={fieldValue.Response === 'Match' ? 'solid' : 'outlined'}>Match</Button>
-                <Button name="Response" onClick={() => handleChange('Not Match')} color='danger' variant={fieldValue.Response === 'Not Match' ? 'solid' : 'outlined'}>Not Match</Button>
-                <Button name="Response" onClick={() => handleChange('Partially Match')} color='warning' variant={fieldValue.Response === 'Partially Match' ? 'solid' : 'outlined'}>Partially Match</Button>
+            <div className='flex gap-3 text-sm rounded-lg'>
+                <Button size='sm' name="Response" onClick={() => handleChange('Match')} color='success' variant={fieldValue.Response === 'Match' ? 'solid' : 'outlined'}>Match</Button>
+                <Button size='sm' name="Response" onClick={() => handleChange('Not Match')} color='danger' variant={fieldValue.Response === 'Not Match' ? 'solid' : 'outlined'}>Not Match</Button>
+                <Button size='sm' name="Response" onClick={() => handleChange('Partially Match')} color='warning' variant={fieldValue.Response === 'Partially Match' ? 'solid' : 'outlined'}>Partially Match</Button>
             </div>
             {show && (
                 <div className='mt-2'>

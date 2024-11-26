@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Input from '@mui/joy/Input';
 import FormControl from '@mui/joy/FormControl'
 import FormLabel from '@mui/joy/FormLabel'
 import Textarea from '@mui/joy/Textarea';
@@ -14,10 +13,10 @@ const Section1 = (props) => {
     init();
    },[])
   return (
-    <div className='mb-3'>
-      <FormControl sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-        <FormLabel sx={{width: '150px', paddingX: '10px', paddingY: '15px'}}>{props.field_name}</FormLabel>
-        <Textarea value={fieldValue} className='w-[300px]' disabled/>
+    <div className='mb-3 w-[33.33%]'>
+      <FormControl>
+        <FormLabel>{props.field_name}</FormLabel>
+        <Textarea value={fieldValue} className='w-[250px]' disabled/>
       </FormControl>
     </div>
   )
