@@ -55,7 +55,7 @@ const Section2 = (props) => {
     };
 
     return (
-        <div className='mb-3 w-1/2'>
+        <div className='mb-5 w-1/2'>
             <FormControl className='mb-3'>
                 <FormLabel>{props.field_name}</FormLabel>
                     <Textarea value={fieldValue.Actual_Value} disabled className='w-[250px]'/>
